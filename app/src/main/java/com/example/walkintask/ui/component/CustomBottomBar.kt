@@ -63,11 +63,9 @@ fun CustomBottomBar(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .height(88.dp)  // barHeight(60) + fabRaise(28)
+            .height(88.dp)
     ) {
         val itemWidth = maxWidth / items.size
-
-        // ✅ FIX: Animated offset ab FAB ke liye use hoga
         val animatedOffset = remember { Animatable(0f) }
         LaunchedEffect(selectedIndex) {
             animatedOffset.animateTo(
@@ -75,8 +73,6 @@ fun CustomBottomBar(
                 animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing)
             )
         }
-
-        // ─── 1. White bar (sirf bottom 60dp) ─────────────────────
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
@@ -84,7 +80,6 @@ fun CustomBottomBar(
                 .align(Alignment.BottomCenter)
         ) {
             drawRect(color = Color.White)
-            // ✅ FIX: drawCircle REMOVE kiya — woh blue blob ban raha tha
             drawLine(
                 color = Color(0xFFEEEEEE),
                 start = Offset(0f, 0f),
@@ -92,8 +87,6 @@ fun CustomBottomBar(
                 strokeWidth = 1.5f
             )
         }
-
-        // ─── 2. Nav items Row ─────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,7 +106,6 @@ fun CustomBottomBar(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    // Selected item ka icon FAB mein show hoga — yahan sirf label
                     if (!isSelected) {
                         Icon(
                             painter = painterResource(item.icon),
@@ -133,11 +125,9 @@ fun CustomBottomBar(
             }
         }
 
-        // ─── 3. Animated floating FAB ─────────────────────────────
         Box(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                // ✅ FIX: Animated offset use — smooth animation
                 .offset(x = with(density) { animatedOffset.value.toDp() })
                 .width(itemWidth)
                 .height(60.dp),
@@ -145,7 +135,7 @@ fun CustomBottomBar(
         ) {
             Box(
                 modifier = Modifier
-                    .padding(top = 2.dp)  // shadow ke liye thoda space
+                    .padding(top = 2.dp)
                     .size(56.dp)
                     .shadow(
                         elevation = 10.dp,
